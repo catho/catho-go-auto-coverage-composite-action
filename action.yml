@@ -5,25 +5,16 @@ inputs:
   github-token:
     description: "Github token to comment on PR"
     required: true
+  coverage-file:
+    description: "File that contains tests results by packaging"
+    required: true
+  total-coverage-file: 
+    description: "File that contains total coverage results"
+    required: true
 
 runs:
   using: "composite"
   steps:
-      - name: Run all tests coverage
-        shell: bash
-        run: go test -coverprofile=coverage.out ./... > coverage.txt && go tool cover -func=coverage.out | grep total > coverage-total.txt
-
-      - name: Upload detailed coverage report
-        uses: actions/upload-artifact@v2
-        with:
-          name: coverage-report
-          path: coverage.txt
-      
-      - name: Upload total coverage 
-        uses: actions/upload-artifact@v2
-        with:
-          name: total-coverage-report
-          path: coverage-total.txt
       
       - name: Comment on PR with test results
         uses: actions/github-script@v4
@@ -32,8 +23,8 @@ runs:
         with:
           script: |
             const fs = require('fs');
-            const coverageReport = fs.readFileSync('coverage.txt', 'utf8');
-            const totalCoverageReport = fs.readFileSync('coverage-total.txt', 'utf8');
+            const coverageReport = fs.readFileSync(${{ inputs.coverage-file }}, 'utf8');
+            const totalCoverageReport = fs.readFileSync(${{ inputs.total-coverage-file }}, 'utf8');
 
             const { data: comments } = await github.issues.listComments({
               issue_number: context.issue.number,
