@@ -9,18 +9,6 @@ inputs:
 runs:
   using: "composite"
   steps:
-      
-      - name: Download detailed coverage report
-        uses: actions/download-artifact@v2
-        with:
-          name: coverage-report
-          path: coverage.txt
-      
-      - name: Download total coverage 
-        uses: actions/download-artifact@v2
-        with:
-          name: total-coverage-report
-          path: coverage-total.txt
 
       - name: Comment on PR with test results
         uses: actions/github-script@v4
