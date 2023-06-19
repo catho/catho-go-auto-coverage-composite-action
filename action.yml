@@ -17,8 +17,8 @@ runs:
         with:
           script: |
             const fs = require('fs');
-            const coverageReport = fs.readFileSync(./coverage.txt, 'utf8');
-            const totalCoverageReport = fs.readFileSync(./coverage-total.txt, 'utf8');
+            const coverageReport = fs.readFileSync('./coverage.txt', 'utf8');
+            const totalCoverageReport = fs.readFileSync('./coverage-total.txt', 'utf8');
 
             const { data: comments } = await github.issues.listComments({
               issue_number: context.issue.number,
