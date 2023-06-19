@@ -6,7 +6,7 @@ inputs:
     description: "Github token to comment on PR"
     required: true
   coverage-file-name:
-    description: "File name that contains tests results"
+    description: "File name that contains tests results by packaging"
     required: true
   total-coverage-file-name:
     description: "File name that contains total coverage tests results"
