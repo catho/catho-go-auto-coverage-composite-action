@@ -5,6 +5,12 @@ inputs:
   github-token:
     description: "Github token to comment on PR"
     required: true
+  coverage-file-name:
+    description: "File name that contains tests results"
+    required: true
+  total-coverage-file-name:
+    description: "File name that contains total coverage tests results"
+    required: true
 
 runs:
   using: "composite"
@@ -17,8 +23,8 @@ runs:
         with:
           script: |
             const fs = require('fs');
-            const coverageReport = fs.readFileSync('./coverage.txt', 'utf8');
-            const totalCoverageReport = fs.readFileSync('./coverage-total.txt', 'utf8');
+            const coverageReport = fs.readFileSync(`./${{ inputs.coverage-file-name }}`, 'utf8');
+            const totalCoverageReport = fs.readFileSync(`./${{ inputs.total-coverage-file-name }}`, 'utf8');
 
             const { data: comments } = await github.issues.listComments({
               issue_number: context.issue.number,
