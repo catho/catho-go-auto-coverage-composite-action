@@ -10,6 +10,7 @@ runs:
   using: "composite"
   steps:
       - name: Run all tests coverage
+        shell: bash
         run: go test -coverprofile=coverage.out ./... > coverage.txt && go tool cover -func=coverage.out | grep total > coverage-total.txt
 
       - name: Upload detailed coverage report
