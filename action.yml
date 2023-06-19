@@ -15,6 +15,18 @@ inputs:
 runs:
   using: "composite"
   steps:
+      
+      - name: Download detailed coverage report
+        uses: actions/download-artifact@v2
+        with:
+          name: coverage-report
+          path: coverage.txt
+      
+      - name: Download total coverage 
+        uses: actions/download-artifact@v2
+        with:
+          name: total-coverage-report
+          path: coverage-total.txt
 
       - name: Comment on PR with test results
         uses: actions/github-script@v4
@@ -23,8 +35,8 @@ runs:
         with:
           script: |
             const fs = require('fs');
-            const coverageReport = ${{ inputs.coverage-file }}
-            const totalCoverageReport = ${{ inputs.total-coverage-file }}
+            const coverageReport = fs.readFileSync(coverage.txt, 'utf8');
+            const totalCoverageReport = fs.readFileSync(coverage-total.txt, 'utf8');
 
             const { data: comments } = await github.issues.listComments({
               issue_number: context.issue.number,
