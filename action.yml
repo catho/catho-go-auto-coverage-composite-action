@@ -16,6 +16,18 @@ runs:
   using: "composite"
   steps:
       
+      - name: Upload detailed coverage report
+        uses: actions/upload-artifact@v2
+        with:
+          name: coverage-report
+          path: ${{ inputs.coverage-file }}
+      
+      - name: Upload total coverage 
+        uses: actions/upload-artifact@v2
+        with:
+          name: total-coverage-report
+          path: ${{ inputs.total-coverage-file }}
+
       - name: Comment on PR with test results
         uses: actions/github-script@v4
         env:
@@ -23,8 +35,8 @@ runs:
         with:
           script: |
             const fs = require('fs');
-            const coverageReport = fs.readFileSync(${{ inputs.coverage-file }}, 'utf8');
-            const totalCoverageReport = fs.readFileSync(${{ inputs.total-coverage-file }}, 'utf8');
+            const coverageReport = fs.readFileSync(coverage.txt, 'utf8');
+            const totalCoverageReport = fs.readFileSync(coverage-total.txt, 'utf8');
 
             const { data: comments } = await github.issues.listComments({
               issue_number: context.issue.number,
