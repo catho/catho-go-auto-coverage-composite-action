@@ -9,12 +9,6 @@ inputs:
 runs:
   using: "composite"
   steps:
-      - uses: actions/checkout@v2
-      - name: Use GoLang ${{ matrix.go-version }}
-        uses: actions/setup-go@v2
-        with:
-            go-version: ${{ matrix.go-version }}
-
       - name: Run all tests coverage
         run: go test -coverprofile=coverage.out ./... > coverage.txt && go tool cover -func=coverage.out | grep total > coverage-total.txt
 
