@@ -25,9 +25,21 @@ runs:
             const fs = require('fs');
             const coverageReport = fs.readFileSync(`./${{ inputs.coverage-file-name }}`, 'utf8');
             const totalCoverageReport = fs.readFileSync(`./${{ inputs.total-coverage-file-name }}`, 'utf8');
+            const { data: prs } = await github.rest.repos.listPullRequestsAssociatedWithCommit({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              commit_sha: context.sha
+            });
+            
+            if (!prs.length) {
+              console.log("No PR associated with this commit. Skipping comment.");
+              return;
+            }
+            const pr = prs[0];
+            const issueNumber = pr.number;
 
             const { data: comments } = await github.issues.listComments({
-              issue_number: context.issue.number,
+              issue_number: issueNumber,
               owner: context.repo.owner,
               repo: context.repo.repo
             });
@@ -48,6 +60,6 @@ runs:
             }
             
             await github.issues.createComment({
-              issue_number: context.issue.number,
+              issue_number: issueNumber,
               ...comment
             });
