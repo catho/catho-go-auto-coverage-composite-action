@@ -59,7 +59,7 @@ runs:
               });
             }
             
-            await github.issues.createComment({
+            await github.rest.issues.createComment({
               issue_number: issueNumber,
               ...comment
             });
