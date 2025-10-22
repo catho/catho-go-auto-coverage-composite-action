@@ -38,7 +38,7 @@ runs:
             const pr = prs[0];
             const issueNumber = pr.number;
 
-            const { data: comments } = await github.issues.listComments({
+            const { data: comments } = await github.rest.issues.listComments({
               issue_number: issueNumber,
               owner: context.repo.owner,
               repo: context.repo.repo
@@ -53,7 +53,7 @@ runs:
             }
 
             if (previousComment) {
-              return await github.issues.updateComment({
+              return await github.rest.issues.updateComment({
                 comment_id: previousComment.id,
                 ...comment
               });
